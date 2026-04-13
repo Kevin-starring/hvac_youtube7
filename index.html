@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HVAC Infrastructure — Infrastructure Is as Important as the Product</title>
+
+  <!-- reveal.js core -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ════════════════════════════════════════════
+       CUSTOM THEME — HVAC INFRA (Dark)
+    ════════════════════════════════════════════ */
+    :root {
+      --bg:       #161616;
+      --text:     rgba(255,255,255,0.88);
+      --accent:   #c0392b;
+      --dark:     #0d0d0d;
+      --muted:    rgba(255,255,255,0.42);
+      --border:   rgba(255,255,255,0.11);
+      --card-bg:  rgba(255,255,255,0.055);
+      --mono:     'JetBrains Mono', monospace;
+    }
+
+    /* Global layout for full-screen backgrounds */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .reveal, .reveal .slides, .reveal .slides > section {
+      height: 100%;
+    }
+    .reveal-viewport { background: var(--bg); }
+
+    /* Base reveal overrides */
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+    .reveal .slides > section {
+      text-align: left;
+      padding: 32px 56px 40px;
+      min-height: 100%;
+      box-sizing: border-box;
+    }
+    .reveal .backgrounds .slide-background {
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
+
+    /* ── Typography ── */
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Inter', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+    .reveal h1 {
+      font-weight: 900;
+      font-size: 3.6em;
+      line-height: 1.05;
+      color: var(--text);
+      margin: 0 0 0.25em;
+    }
+    .reveal h2 {
+      font-weight: 900;
+      font-size: 2.6em;
+      line-height: 1.1;
+      color: var(--text);
+      margin: 0 0 0.15em;
+    }
+    .reveal h3 {
+      font-weight: 700;
+      font-size: 1.28em;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 0.4em;
+    }
+    .reveal p {
+      font-size: 1.23em;
+      line-height: 1.65;
+      margin: 0 0 0.6em;
+    }
+    .reveal strong { color: var(--text); font-weight: 700; }
+    .reveal em { font-style: italic; color: var(--muted); }
+
+    /* ── Top Nav Bar ── */
+    .slide-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .slide-nav .brand {
+      font-family: var(--mono);
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .slide-nav .section-tag {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      background: rgba(192,57,43,0.12);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── Tagline ── */
+    .tagline {
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1.15em;
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    /* ── Capability Grid ── */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin: 6px 0 8px;
+    }
+    .cap-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .cap-item {
+      background: var(--card-bg);
+      border-left: 2px solid var(--accent);
+      padding: 9px 13px;
+      border-radius: 0 3px 3px 0;
+    }
+    .cap-item.ghost {
+      background: transparent;
+      border-left-color: transparent;
+    }
+    .cap-num {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 5px;
+    }
+    .cap-title {
+      font-weight: 700;
+      font-size: 1.5em;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+    .cap-desc {
+      font-size: 1.38em;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* ── Benefit Bar ── */
+    .benefit-bar {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--dark);
+      border: 1px solid rgba(192,57,43,0.25);
+      color: rgba(255,255,255,0.85);
+      padding: 11px 18px;
+      border-radius: 3px;
+      margin-top: 6px;
+    }
+    .benefit-label {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .benefit-text {
+      font-size: 1.5em;
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    /* ════════════════════════════════════════════
+       SLIDE TYPES
+    ════════════════════════════════════════════ */
+
+    /* ── S0 · TITLE ── */
+    .slide-title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .title-eyebrow {
+      font-family: var(--mono);
+      font-size: 1.0em;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .slide-title h1 { font-size: 3.4em; max-width: 820px; }
+    .title-rule {
+      width: 72px;
+      height: 3px;
+      background: var(--accent);
+      margin: 20px 0;
+    }
+    .title-subtitle {
+      font-size: 1.2em;
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .title-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 22px;
+      font-family: var(--mono);
+      font-size: 1.0em;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .title-meta .sep { color: var(--border); }
+
+    /* ── Section Divider (dark) ── stays at original sizes ── */
+    .slide-part {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+    .slide-part .part-num {
+      font-family: var(--mono);
+      font-size: 0.72em;
+      letter-spacing: 0.22em;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .slide-part h2 {
+      color: #fff !important;
+      font-size: 3.2em;
+      line-height: 1.05;
+      margin-bottom: 22px;
+    }
+    .part-rule {
+      width: 56px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 22px;
+    }
+    .slide-part .part-def {
+      font-size: 0.76em;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .slide-part .part-tagline {
+      font-size: 0.9em;
+      font-style: italic;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* ── Opening ── */
+    .opening-quote {
+      font-size: 1.28em;
+      font-style: italic;
+      line-height: 1.65;
+      border-left: 3px solid var(--accent);
+      padding-left: 16px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .compare-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .cmp-col {
+      background: var(--card-bg);
+      padding: 14px 18px;
+      border-radius: 3px;
+    }
+    .cmp-head {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      text-transform: uppercase;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .cmp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.0em;
+      color: var(--text);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      line-height: 1.4;
+    }
+    .cmp-row:last-child { border-bottom: none; }
+    .cmp-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .core-msg {
+      font-size: 1.14em;
+      color: var(--text);
+      line-height: 1.65;
+      margin: 8px 0;
+    }
+    .slogan {
+      font-style: italic;
+      font-size: 1.14em;
+      color: var(--muted);
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      line-height: 1.55;
+    }
+
+    /* ── Video slides ── */
+    /* ── Video slides — text above, video below ── */
+    .slide-video {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 0 !important;
+      /* NO position:relative — reveal.js needs position:absolute on sections */
+    }
+    .slide-video .video-header {
+      flex-shrink: 0;
+      text-align: center;
+      padding: 18px 24px 12px;
+    }
+    .slide-video .vid-label {
+      font-family: var(--mono);
+      font-size: 0.65em;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .slide-video h2 {
+      color: #fff !important;
+      font-size: 1.5em !important;
+      text-align: center;
+    }
+    .slide-video .video-wrap {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    .slide-video .video-wrap video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .slide-video .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ── Closing ── */
+    .equation {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.88);
+      padding: 13px 22px;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 1.1em;
+      text-align: center;
+      letter-spacing: 0.04em;
+      margin: 8px 0 10px;
+      line-height: 1.5;
+    }
+    .equation .plus   { color: var(--accent);          margin: 0 6px; }
+    .equation .equals { color: rgba(255,255,255,0.4);  margin: 0 6px; }
+    .equation .result { color: var(--accent);           font-weight: 700; }
+
+    .val-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.0em;
+      margin: 0 0 8px;
+    }
+    .val-table th {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      padding: 8px 14px;
+      font-family: var(--mono);
+      font-size: 0.88em;
+      text-align: left;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+    .val-table th.hl { color: var(--accent); }
+    .val-table td {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .val-table tr:last-child td { border-bottom: none; }
+    .val-table td:first-child {
+      font-weight: 700;
+      font-family: var(--mono);
+      font-size: 0.85em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .val-table td.good { color: var(--accent); font-weight: 600; }
+    .val-table tr:nth-child(odd) td { background: rgba(255,255,255,0.04); }
+
+    .core-points {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin: 8px 0;
+    }
+    .cp-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 1.0em;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .cp-num {
+      font-family: var(--mono);
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.92em;
+      padding-top: 1px;
+    }
+
+    .final-quote {
+      font-style: italic;
+      font-size: 1.14em;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    /* ── 3-2 Outcome Grid ── */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 6px;
+    }
+    .outcome-item {
+      background: var(--card-bg);
+      border-left: 2px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 3px 3px 0;
+    }
+    .outcome-role {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      margin-bottom: 6px;
+    }
+    .outcome-msg {
+      font-size: 0.92em;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ── Shoe Closing Slide ── */
+    .shoe-close {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center;
+      padding: 50px 80px !important;
+      height: 100%;
+    }
+    .shoe-icon { font-size: 4.8em; margin-bottom: 14px; line-height: 1; }
+    .shoe-hook {
+      font-weight: 700;
+      font-size: 1.95em;
+      color: var(--text);
+      line-height: 1.5;
+      max-width: 700px;
+      margin-bottom: 16px;
+    }
+    .shoe-body {
+      font-size: 1.35em;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 640px;
+      margin-bottom: 18px;
+    }
+    .shoe-body strong { color: var(--text); }
+    .shoe-rule {
+      width: 480px;
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 18px;
+    }
+    .shoe-final {
+      font-style: italic;
+      font-size: 1.73em;
+      color: var(--accent);
+      line-height: 1.65;
+      max-width: 680px;
+    }
+
+    /* ════════════════════════════════════════════
+       REVEAL.JS OVERRIDES
+    ════════════════════════════════════════════ */
+    .reveal .progress { bottom: 22px; height: 2px; background: rgba(255,255,255,0.08); }
+    .reveal .progress span { background: var(--accent); }
+    .reveal .slide-number {
+      bottom: 26px; right: 22px;
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0;
+    }
+    .reveal .controls { color: var(--accent); }
+    /* hide controls arrows on clean slides */
+    .reveal .controls .navigate-left,
+    .reveal .controls .navigate-right { opacity: 0.35; }
+
+    /* ── Status bar ── */
+    #status-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 22px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 22px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.1em;
+      z-index: 300;
+    }
+    #status-bar .sk { color: rgba(255,255,255,0.45); }
+    #status-bar .sv { color: rgba(255,255,255,0.2); }
+    #status-bar .sc { color: rgba(192,57,43,0.8); }
+
+    /* ── FE Slide ── */
+    .fe-wrap { width:100%; height:100%; display:flex; flex-direction:column; padding:16px 26px 14px; box-sizing:border-box; }
+    .fe-title-row { display:flex; align-items:center; margin-bottom:10px; }
+    .fe-title { font-size:1.5em; font-weight:700; color:#fff; margin:0; }
+    .fe-stages { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:8px; }
+    .fe-col { display:flex; flex-direction:column; }
+    .fe-tag { font-size:1.08em; font-weight:700; padding:3px 10px; border-radius:4px; display:inline-block; margin-bottom:4px; color:#fff; width:fit-content; letter-spacing:0.04em; }
+    .fe-tag.t-proposal   { background:#3d7a42; }
+    .fe-tag.t-design     { background:#8a7a20; }
+    .fe-tag.t-install    { background:#1e5a8a; }
+    .fe-tag.t-startup    { background:#8a4a18; }
+    .fe-num  { font-size:1.58em; font-weight:700; color:#fff; margin-bottom:3px; line-height:1.35; }
+    .fe-phase { font-size:0.82em; color:rgba(255,255,255,0.72); line-height:1.45; margin-bottom:6px; }
+    .fe-photo { width:100%; height:255px; border-radius:8px; overflow:hidden; padding:8px; box-sizing:border-box; background:rgba(255,255,255,0.06); }
+    .fe-photo img { width:100%; height:100%; object-fit:cover; display:block; border-radius:4px; }
+    .fe-bottom { display:flex; flex-direction:column; gap:6px; }
+    .fe-row { display:grid; grid-template-columns:80px repeat(4,1fr); border:1px solid rgba(255,255,255,0.15); border-radius:10px; overflow:visible; }
+    .fe-row-lbl { background:#a02020; display:flex; align-items:center; justify-content:center; font-size:1.11em; font-weight:700; text-align:center; padding:4px; border-radius:10px 0 0 10px; }
+    .fe-items { padding:7px 12px; font-size:0.82em; border-left:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.9); line-height:1.55; }
+    .fe-items li { list-style:none; margin-left:0; }
+
+    /* ── Horizontal-only: hide up/down controls ── */
+    .reveal .controls .navigate-up,
+    .reveal .controls .navigate-down { display: none !important; }
+
+    /* ── Scaled slide ×1.5 ── */
+    .slide-xl { font-size: 1.5em; }
+    .slide-xl .cap-num       { font-size: 27px; }
+    .slide-xl .benefit-label { font-size: 27px; }
+    .slide-xl .slide-nav .brand       { font-size: 21px; }
+    .slide-xl .slide-nav .section-tag { font-size: 21px; }
+
+    /* ── BeamsBackground — title slide ── */
+    #beams-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      filter: blur(15px);
+      pointer-events: none;
+    }
+    .beams-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(10,10,10,0.05);
+      backdrop-filter: blur(50px);
+      animation: beamsPulse 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes beamsPulse {
+      0%, 100% { opacity: 0.05; }
+      50%       { opacity: 0.15; }
+    }
+    .beams-content {
+      position: relative;
+      z-index: 10;
+      animation: beamsFadeIn 0.8s ease forwards;
+    }
+    @keyframes beamsFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Slide #/1 overrides ── */
+    .reveal .slides > section.slide-opening {
+      padding: 22px 56px 18px;
+    }
+    .slide-opening h2 {
+      font-size: 1.55em;
+      margin-bottom: 0.06em;
+    }
+    .slide-opening .opening-quote {
+      font-size: 1.28em;
+      line-height: 1.4;
+      margin-bottom: 7px;
+    }
+    .slide-opening .compare-cols {
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .slide-opening .cmp-col  { padding: 8px 13px 10px; }
+    .slide-opening .cmp-head { font-size: 1.4em; padding-bottom: 5px; margin-bottom: 5px; }
+    .slide-opening .cmp-row  { padding: 4px 0; font-size: 1.18em; }
+    .slide-opening .core-msg { font-size: 1.28em; line-height: 1.45; margin: 4px 0 3px; }
+    .slide-opening .slogan   { font-size: 1.18em; line-height: 1.4; }
+
+    /* ── Highlight row fragment ── */
+    .cmp-row.cmp-row-hl {
+      border: 2px solid transparent;
+      border-radius: 4px;
+      padding: 2px 4px;
+      margin: 0;
+      box-sizing: border-box;
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+    .cmp-row.cmp-row-hl.visible {
+      border-color: #3ddc84;
+      background: rgba(61,220,132,0.08);
+    }
+    .cmp-row.cmp-row-hl.visible .cmp-dot {
+      background: #3ddc84;
+    }
+
+    .highlight-overlay {
+      position: absolute;
+      border: 2px solid #3ddc84;
+      box-shadow: 0 0 0 2px rgba(61,220,132,0.12);
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .highlight-overlay.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════════════════════════════════
+         S00 · TITLE
+    ══════════════════════════════════════ -->
+    <section class="slide-title" data-background-color="#0a0a0a">
+      <!-- BeamsBackground canvas -->
+      <canvas id="beams-canvas"></canvas>
+      <div class="beams-overlay"></div>
+      <!-- Title content -->
+      <div class="beams-content">
+        <div class="title-eyebrow">HVAC INFRASTRUCTURE · 2026</div>
+        <h1>Infrastructure Is as<br>Important as the Product</h1>
+        <div class="title-rule"></div>
+        <div class="title-subtitle">
+          The Value of HVAC Infrastructure Through the Lens of AI Infrastructure Paradigm
+        </div>
+        <div class="title-meta">
+          <span>15 MIN PRESENTATION</span>
+          <span class="sep">·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S01 · OPENING
+    ══════════════════════════════════════ -->
+    <section class="slide-opening" data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">HVAC INFRA · OPENING</span>
+        <span class="section-tag">00 · INTRO</span>
+      </div>
+      <h2>AI and HVAC:<br>Two Stories with the Same Structure</h2>
+      <div class="opening-quote">
+        "Even the best AI cannot function without a data center.<br>
+        Even the best HVAC system cannot deliver its true value without infrastructure."
+      </div>
+      <div class="compare-cols">
+        <div class="cmp-col">
+          <div class="cmp-head">AI WORLD</div>
+          <div class="cmp-row"><span class="cmp-dot"></span>ChatGPT · Gemini · Claude</div>
+          <div class="cmp-row"><span class="cmp-dot"></span>Data Center</div>
+          <div class="cmp-row cmp-row-hl fragment custom" data-fragment-index="1"><span class="cmp-dot"></span>Electrical / Water infra · Service &amp; Maintenance infra</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head">HVAC WORLD</div>
+          <div class="cmp-row"><span class="cmp-dot"></span>Cooling · Heating · Ventilation</div>
+          <div class="cmp-row"><span class="cmp-dot"></span>HVAC Product</div>
+          <div class="cmp-row cmp-row-hl fragment custom" data-fragment-index="1"><span class="cmp-dot"></span>Electrical / Water infra · Service &amp; Maintenance infra</div>
+        </div>
+      </div>
+      <p class="core-msg">
+        The product is just the starting point. Only when <strong>intellectual infrastructure</strong>
+        and <strong>physical infrastructure</strong> work together can a customer's building operate at its best.
+      </p>
+      <div class="slogan">
+        "We sell equipment. And we provide everything needed to ensure that equipment performs
+        perfectly for its entire lifetime."
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S02 · PART 1 DIVIDER
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-part">
+        <div class="part-num">PART 01 / 02</div>
+        <h2>Intellectual<br>Infrastructure</h2>
+        <div class="part-rule"></div>
+        <p class="part-def" style="font-size:1.52em;">
+          An intangible support system based on knowledge, expertise, and data<br>
+          — Equivalent to AI's algorithms, models, and software platforms
+        </p>
+        <p class="part-tagline">"Invisible, yet the first force to take action."</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S03 · 1-1 ENGINEERING DESIGN SUPPORT
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">INTELLECTUAL INFRA</span>
+        <span class="section-tag">01.1 · ENGINEERING DESIGN</span>
+      </div>
+      <h2>Engineering Design Support</h2>
+      <div class="tagline">"Precision starts at the design stage — let us get the first step right together."</div>
+      <div class="cap-grid">
+        <div class="cap-item">
+          <div class="cap-num">01 · LOAD</div>
+          <div class="cap-title">Load Calculation</div>
+          <div class="cap-desc">Accurate heating and cooling load analysis tailored to building characteristics</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">02 · SIZE</div>
+          <div class="cap-title">Capacity Sizing</div>
+          <div class="cap-desc">Optimal capacity recommendations without over- or under-design</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">03 · SYS</div>
+          <div class="cap-title">System Configuration</div>
+          <div class="cap-desc">System design optimized for space, use case, and budget</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">04 · SIM</div>
+          <div class="cap-title">Energy Simulation</div>
+          <div class="cap-desc">Annual energy consumption forecasting and comparative analysis</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">05 · BIM</div>
+          <div class="cap-title">BIM / CAD Drawing Support</div>
+          <div class="cap-desc">BIM objects and CAD files ready to insert into design drawings</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">06 · SPEC</div>
+          <div class="cap-title">Specification Writing Support</div>
+          <div class="cap-desc">Drafting procurement specs and providing technical review</div>
+        </div>
+      </div>
+      <div class="benefit-bar">
+        <span class="benefit-label">BENEFIT</span>
+        <span class="benefit-text">Eliminate rework costs, procurement errors, and energy waste caused by design mistakes — caught at the design stage.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S04 · VIDEO — YouTube (ANhShe8p5Gs)
+         (plays after 1-1 Engineering Design)
+    ══════════════════════════════════════ -->
+    <section class="slide-video" data-background-image="presentation template/Slide3.jpg" data-background-size="cover">
+      <div class="video-header">
+        <div class="vid-label">LATS PLATFORM · DEMONSTRATION</div>
+        <h2>Intelligent HVAC Design Platform</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe id="lats-yt"
+          src="https://www.youtube.com/embed/ANhShe8p5Gs?enablejsapi=1&rel=0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S05 · 1-2 TECHNICAL CONSULTING
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">INTELLECTUAL INFRA</span>
+        <span class="section-tag">01.2 · CONSULTING</span>
+      </div>
+      <h2>Technical Consulting &amp; Solution Proposal</h2>
+      <div class="tagline">"Every building is different. That's why our proposals are always tailored."</div>
+      <div class="cap-grid">
+        <div class="cap-item">
+          <div class="cap-num">01 · CUSTOM</div>
+          <div class="cap-title">Customized Solution</div>
+          <div class="cap-desc">Site-specific recommendations rather than standard catalog selections</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">02 · EFF</div>
+          <div class="cap-title">Efficiency Optimization</div>
+          <div class="cap-desc">Energy cost reduction via operating-condition-based COP / EER analysis</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">03 · GREEN</div>
+          <div class="cap-title">Green Building Strategy</div>
+          <div class="cap-desc">Support for LEED, Green Mark, and other environmental certifications</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">04 · LCC</div>
+          <div class="cap-title">Life Cycle Cost Analysis</div>
+          <div class="cap-desc">Integrated cost view: initial investment + operating + maintenance</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">05 · VE</div>
+          <div class="cap-title">Value Engineering</div>
+          <div class="cap-desc">Identifying alternatives that deliver the same performance at a more reasonable cost</div>
+        </div>
+        <div class="cap-item ghost"></div>
+      </div>
+      <div class="benefit-bar">
+        <span class="benefit-label">BENEFIT</span>
+        <span class="benefit-text">Decision-making backed by numbers — we provide the rationale for why this system is the right choice.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S06 · VIDEO — YouTube (1SbZ0TqfBL8)
+         (plays after 1-2 Technical Consulting)
+    ══════════════════════════════════════ -->
+    <section class="slide-video" data-background-image="presentation template/Slide3.jpg" data-background-size="cover">
+      <div class="video-header">
+        <div class="vid-label">LG HVAC · CASE STUDY</div>
+        <h2>VRF Multi V — 36 Tuas Road, Singapore</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe id="tuas-yt"
+          src="https://www.youtube.com/embed/1SbZ0TqfBL8?enablejsapi=1&rel=0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S07 · PART 2 DIVIDER
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-part">
+        <div class="part-num">PART 02 / 02</div>
+        <h2>Physical<br>Infrastructure</h2>
+        <div class="part-rule"></div>
+        <p class="part-def" style="font-size:1.52em;">
+          A tangible, on-site support system — people, parts, and networks<br>
+          — Equivalent to AI's data centers, servers, and network hardware
+        </p>
+        <p class="part-tagline">"We keep our promises not with words, but with people and system."</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S07 · 2-1 INSTALLATION & COMMISSIONING
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.1 · INSTALLATION</span>
+      </div>
+      <h2>Installation &amp; Commissioning Support</h2>
+      <div class="tagline">"From the first step to the hand over — we guarantee a flawless completion."</div>
+      <div class="cap-grid">
+        <div class="cap-item">
+          <div class="cap-num">01 · SUPER</div>
+          <div class="cap-title">Installation Supervision</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">02 · PIPE</div>
+          <div class="cap-title">Piping / Electrical Wiring Guide</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">03 · REF</div>
+          <div class="cap-title">Refrigerant Charging &amp; Inspection</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">04 · COMM</div>
+          <div class="cap-title">Commissioning</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">05 · CHECK</div>
+          <div class="cap-title">Startup Checklist</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">06 · PERF</div>
+          <div class="cap-title">Performance Verification</div>
+        </div>
+
+      </div>
+      <div class="benefit-bar">
+        <span class="benefit-label">BENEFIT</span>
+        <span class="benefit-text">100% design-specification performance from day one — a clean handover with zero defect claims.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S08b · FE IMAGE
+         (shows after 2-1 Installation & Commissioning)
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="fe-wrap">
+        <div class="fe-title-row">
+          <h2 class="fe-title">Field Installation Quality Management</h2>
+        </div>
+        <div class="fe-stages">
+          <div class="fe-col">
+            <div class="fe-tag t-proposal">Proposal</div>
+            <div class="fe-num">FE 1</div>
+            <div class="fe-phase">Construction – Foundation<br>CAC Biz. – Access</div>
+            <div class="fe-photo"><img src="FE1.jpg" alt="FE1"></div>
+          </div>
+          <div class="fe-col">
+            <div class="fe-tag t-design">Design Review</div>
+            <div class="fe-num">FE 2</div>
+            <div class="fe-phase">Construction – Structure<br>CAC Biz. – Spec-in / Award</div>
+            <div class="fe-photo"><img src="FE2.jpg" alt="FE2"></div>
+          </div>
+          <div class="fe-col">
+            <div class="fe-tag t-install">Installation Check</div>
+            <div class="fe-num">FE 3</div>
+            <div class="fe-phase">Construction – Under construction<br>CAC Biz. – Installation</div>
+            <div class="fe-photo"><img src="FE3.jpg" alt="FE3"></div>
+          </div>
+          <div class="fe-col">
+            <div class="fe-tag t-startup">Start-Up</div>
+            <div class="fe-num">FE 4</div>
+            <div class="fe-phase">Construction – Interior<br>CAC Biz. – Start-Up</div>
+            <div class="fe-photo"><img src="FE4.jpg" alt="FE4"></div>
+          </div>
+        </div>
+        <div class="fe-bottom">
+          <div class="fe-row">
+            <div class="fe-row-lbl">Activity</div>
+            <ul class="fe-items"><li>Support Proposal</li><li>System Proposal</li><li>Project Proposal</li><li>LCC (Life Cycle Cost) Analysis</li></ul>
+            <ul class="fe-items"><li>Installation Drawing Review</li><li>Related System Check</li><li>Work Scope Check</li><li>Load Review</li></ul>
+            <ul class="fe-items"><li>Installation Review</li><li>Installation Standard</li><li>Installation Quality</li><li>Sample House Test</li></ul>
+            <ul class="fe-items"><li>Start-Up</li><li>Trouble Shooting</li><li>Start Up Report</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S10b · LG HVAC ACADEMY
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">LG HVAC ACADEMY</span>
+      </div>
+      <div style="display:flex; flex-direction:column; height:calc(100% - 36px); padding:0 40px 20px; box-sizing:border-box;">
+        <div style="margin-bottom:14px;">
+          <h2 style="font-size:1.55em; font-weight:700; color:#fff; margin:0 0 4px;">LG HVAC Academy</h2>
+          <div style="font-size:1.5em; color:var(--muted); font-style:italic; margin-bottom:4px;">Develop human resources &amp; capabilities for business growth with LG Academy</div>
+          <div class="fragment fade-in" data-fragment-index="1" style="font-size:1.56em; color:var(--accent); font-weight:600; letter-spacing:0.06em;">Total 12 Academies in Asia</div>
+        </div>
+        <div style="flex:1; min-height:0; position:relative;">
+          <img src="academy1.jpg" class="fragment fade-out" data-fragment-index="1"
+               style="position:absolute; top:0; left:50%; transform:translateX(-50%); height:100%; width:auto; max-width:100%; border-radius:8px;">
+          <img src="academy2.jpg" class="fragment fade-in" data-fragment-index="1"
+               style="position:absolute; top:0; left:50%; transform:translateX(-50%); height:100%; width:auto; max-width:100%; border-radius:8px;">
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S09 · 2-2 PREVENTIVE MAINTENANCE (LG TMS)
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.2 · MAINTENANCE &amp; ONTIME SERVICE</span>
+      </div>
+      <h2>Preventive Maintenance &amp; Ontime Service</h2>
+      <div class="tagline">"The real service is showing up before something goes wrong."</div>
+      <div class="cap-grid">
+        <div class="cap-item">
+          <div class="cap-num">01 · TMS</div>
+          <div class="cap-title">24/7 Real-Time Monitoring via LG TMS</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">02 · ALERT</div>
+          <div class="cap-title">Automated Fault Detection &amp; Alerting</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">03 · REMOTE</div>
+          <div class="cap-title">Remote Diagnosis &amp; Intervention</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">04 · ENERGY</div>
+          <div class="cap-title">Efficiency Tracking &amp; Energy Saving</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">05 · DASH</div>
+          <div class="cap-title">Service History &amp; Report Dashboard</div>
+        </div>
+        <div class="cap-item ghost"></div>
+      </div>
+      <div class="benefit-bar">
+        <span class="benefit-label">BENEFIT</span>
+        <span class="benefit-text">With LG TMS, your HVAC system is monitored around the clock — problems are caught before they become failures, and every service visit is backed by data, not guesswork.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S09c · LG TMS SYSTEM OVERVIEW
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.2 · LG TMS SYSTEM</span>
+      </div>
+      <h2 style="margin-bottom:4px;">Real-time Total Management System</h2>
+      <div class="tagline" style="margin-bottom:10px;">"BECON Cloud — always connected, always monitored."</div>
+      <div style="display:flex; gap:20px; height:calc(100% - 148px);">
+
+        <!-- Left: three system cards -->
+        <div style="flex:1; display:flex; flex-direction:column; gap:8px; justify-content:center; font-size:0.8em;">
+
+          <div class="cap-item">
+            <div class="cap-num">RCS · REMOTE CONTROL SYSTEM</div>
+            <div class="cap-title">Real-time Monitoring &amp; Control</div>
+            <div class="cap-desc">Unified control across all sites via Mobile, PC, and Tablet PC — anywhere, anytime access to live equipment status.</div>
+          </div>
+
+          <div class="cap-item">
+            <div class="cap-num">FMS · FACILITY MAINTENANCE SYSTEM</div>
+            <div class="cap-title">Proactive Repair Based on Real-time Diagnosis</div>
+            <div class="cap-desc">Remote check-up, Group Management, Big-data analysis, 24×7 Monitoring, and automated check-up reports keep failures from happening.</div>
+          </div>
+
+          <div class="cap-item">
+            <div class="cap-num">EMS · ENERGY MANAGEMENT SYSTEM</div>
+            <div class="cap-title">User-friendly Saving Modes</div>
+            <div class="cap-desc">No forced shutdowns — EMS Consulting and automated Results Reports optimize energy consumption without disrupting operations.</div>
+          </div>
+
+        </div>
+
+        <!-- Right: TMS1.jpg diagram -->
+        <div style="flex:1.4; display:flex; align-items:center; justify-content:center;">
+          <img src="TMS1.jpg" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SERVICE CENTER NETWORK
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.3 · SERVICE NETWORK</span>
+      </div>
+      <h2 style="margin-bottom:4px;">LG Electronics Service Center Network</h2>
+      <div class="tagline" style="margin-bottom:10px;">"Wherever your project is — our service team is already there."</div>
+      <div style="display:flex; gap:24px; height:calc(100% - 148px); align-items:stretch;">
+
+        <!-- Left: key messages -->
+        <div style="flex:1; display:flex; flex-direction:column; gap:10px; justify-content:center; font-size:0.8em;">
+          <div class="cap-item">
+            <div class="cap-num">COVERAGE</div>
+            <div class="cap-title">Southeast Asia &amp; Australia</div>
+            <div class="cap-desc">Service centers across Thailand, Vietnam, Philippines, Malaysia, Indonesia, Singapore, Australia and more — full regional coverage.</div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">RESPONSE</div>
+            <div class="cap-title">Rapid On-site Dispatch</div>
+            <div class="cap-desc">LG-certified engineers ready to respond in every major city — minimizing downtime and protecting your business continuity.</div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">NETWORK</div>
+            <div class="cap-title">Integrated Parts &amp; Support</div>
+            <div class="cap-desc">Genuine spare parts, technical documentation, and remote diagnostics backed by LG's global supply chain.</div>
+          </div>
+        </div>
+
+        <!-- Right: map image -->
+        <div style="flex:1.6; display:flex; align-items:center; justify-content:center;">
+          <img src="LG_Service_Center.png" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S08b · TMS BENEFIT IMAGE
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.2 · LG TMS BENEFIT</span>
+      </div>
+      <h2>Real-time Total Management System</h2>
+      <div class="tagline">"A loyal partner helping you achieve stable business growth."</div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; height:calc(100% - 148px);">
+        <img src="TMS_benefit_2.jpg" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:6px;">
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S11 · 2-3 LIFECYCLE MANAGEMENT
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.3 · LIFECYCLE</span>
+      </div>
+      <h2>Lifecycle &amp; Asset Management</h2>
+      <div class="tagline">"Equipment is not a cost. Managed properly, it becomes an asset."</div>
+      <div class="cap-grid cap-grid-2">
+        <div class="cap-item">
+          <div class="cap-num">01 · ASSET</div>
+          <div class="cap-title">Asset Lifecycle Management</div>
+          <div class="cap-desc">Integrated management of the full history from installation to decommissioning</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">02 · EOL</div>
+          <div class="cap-title">End-of-Life Planning</div>
+          <div class="cap-desc">Preventing sudden shock from emergency replacements of aging equipment</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">03 · AUDIT</div>
+          <div class="cap-title">Energy Audit</div>
+          <div class="cap-desc">LATS Analyzer–based quantitative evaluation of current equipment efficiency degradation levels</div>
+        </div>
+        <div class="cap-item">
+          <div class="cap-num">04 · RETRO</div>
+          <div class="cap-title">Retrofit Solution</div>
+          <div class="cap-desc">Step-by-step upgrades to improve efficiency without full equipment replacement</div>
+        </div>
+      </div>
+      <div class="benefit-bar">
+        <span class="benefit-label">BENEFIT</span>
+        <span class="benefit-text">Transform HVAC equipment from a simple cost into a managed asset.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         LATS ANALYZER SLIDES
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">PHYSICAL INFRA</span>
+        <span class="section-tag">02.3 · LATS ANALYZER</span>
+      </div>
+      <h2 style="margin-bottom:4px;">LATS Analyzer — On-site Energy Audit</h2>
+      <div class="tagline" style="margin-bottom:8px;">"Measure first. Then optimize."</div>
+
+      <!-- Two-column label row -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; margin-bottom:6px; padding:0 4px;">
+        <div style="text-align:center;">
+          <div style="font-size:1.25em; font-weight:700; color:var(--text);">Traditional Energy Audit</div>
+          <div style="font-size:1.0em; color:var(--muted); font-style:italic; margin-top:2px;">" a lot of time, effort &amp; money"</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.25em; font-weight:700; color:var(--text);">LG Energy Audit</div>
+          <div style="font-size:1.0em; color:var(--muted); font-style:italic; margin-top:2px;">" Easy and Accurate Evaluation"</div>
+        </div>
+      </div>
+
+      <div style="flex:1; position:relative; height:calc(100% - 188px);">
+        <!-- Image 1: shown on entry -->
+        <img src="LATS_Analyzer1.jpg"
+             class="fragment fade-out" data-fragment-index="1"
+             style="position:absolute; top:0; left:50%; transform:translateX(-50%); height:100%; width:auto; max-width:100%; object-fit:contain; border-radius:8px;">
+        <!-- Image 2: shown after first → press -->
+        <img src="LATS_Analyzer2.jpg"
+             class="fragment fade-in" data-fragment-index="1"
+             style="position:absolute; top:0; left:50%; transform:translateX(-50%); height:100%; width:auto; max-width:100%; object-fit:contain; border-radius:8px;">
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S11 · 3-2 — YOUR BUSINESS GROWS
+    ══════════════════════════════════════ -->
+    <section data-background-image="presentation template/Slide2.JPG" data-background-size="cover">
+      <div class="slide-nav">
+        <span class="brand">HVAC INFRA · CLOSING</span>
+        <span class="section-tag">3-2 · BUSINESS IMPACT</span>
+      </div>
+      <h2>Your Business Grows When You Stand on Great Infrastructure</h2>
+      <div style="font-size:1.5em;">
+        <div class="tagline">"We don't just keep your HVAC system running — we keep your business running."</div>
+
+        <div class="outcome-grid">
+          <div class="outcome-item">
+            <div class="outcome-role">DESIGNERS</div>
+            <div class="outcome-msg">Deliver projects on time, backed by accurate calculations and expert support</div>
+          </div>
+          <div class="outcome-item">
+            <div class="outcome-role">CONTRACTORS</div>
+            <div class="outcome-msg">Hand over buildings with zero-defect confidence</div>
+          </div>
+          <div class="outcome-item">
+            <div class="outcome-role">BUILDING OWNERS</div>
+            <div class="outcome-msg">Operate facilities with predictable costs and zero nasty surprises</div>
+          </div>
+          <div class="outcome-item">
+            <div class="outcome-role">END USERS</div>
+            <div class="outcome-msg">Experience comfort so seamless, they never think about the system behind it</div>
+          </div>
+        </div>
+
+        <div class="final-quote" style="margin-top:10px;">
+          "Great infrastructure doesn't just support a building.<br>
+          It supports the people, the business, and the ambitions inside it."
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         S12 · CLOSING LINE — THE SHOE ANALOGY
+    ══════════════════════════════════════ -->
+    <section class="shoe-close" data-background-image="presentation template/Slide1.JPG" data-background-size="cover">
+      <div class="shoe-icon">👟</div>
+      <div class="shoe-hook">
+        You know those shoes with a hidden heel lift?<br>
+        The ones that quietly add a few centimeters —<br>
+        and suddenly, you carry yourself differently.
+      </div>
+      <p class="shoe-body">
+        Your product is already good.<br>
+        But with the right infrastructure beneath it — the engineering support,
+        the monitoring, the service network, the expertise —<br>
+        <strong>your entire business stands a little taller.</strong><br><br>
+        Not because the product changed.<br>
+        Because <strong>what supports it</strong> changed.
+      </p>
+      <div class="shoe-rule"></div>
+      <div class="shoe-final">
+        "Slip on great infrastructure,<br>
+        and you'll be surprised how much taller your business stands."
+      </div>
+    </section>
+
+  </div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<!-- Status Bar -->
+<div id="status-bar">
+  <span><span class="sk">STATUS:</span> <span class="sv">CONNECTED</span></span>
+  <span><span class="sk">SYSTEM:</span> <span class="sv">HVAC_INFRA_v1.0</span></span>
+  <span><span class="sk">SLIDE:</span> <span class="sc" id="sb-slide">01 / 16</span></span>
+  <span style="margin-left:auto;"><span class="sk">[ F ]</span> <span class="sv">FULLSCREEN</span></span>
+</div>
+
+<!-- reveal.js -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width:  1280,
+    height: 720,
+    margin: 0.0,
+    hash:   true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    touch: true,
+    transition: 'slide',
+    backgroundTransition: 'none',
+    navigationMode: 'linear',
+    keyboard: {
+      // Arrow keys — horizontal only
+      37: () => Reveal.prev(),   // ← left
+      38: () => Reveal.prev(),   // ↑ up  → previous
+      39: () => Reveal.next(),   // → right
+      40: () => Reveal.next(),   // ↓ down → next
+      // Wireless presenter clicker (Logitech, Kensington, etc.)
+      33: () => Reveal.prev(),   // PageUp   → previous
+      34: () => Reveal.next(),   // PageDown → next
+      // F key — fullscreen
+      70: () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    }
+  });
+
+  /* ── Status bar counter ── */
+  function updateStatus(indexh) {
+    const total = document.querySelectorAll('.reveal .slides > section').length;
+    document.getElementById('sb-slide').textContent =
+      String(indexh + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  }
+
+  Reveal.on('ready',        e => updateStatus(e.indexh));
+  Reveal.on('slidechanged', e => {
+    updateStatus(e.indexh);
+
+    /* ── Video: pause & reset when leaving the slide ── */
+    // YouTube iframe (slide 4)
+    const latsIframe = document.getElementById('lats-yt');
+    if (latsIframe && e.indexh !== 4) {
+      latsIframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*'
+      );
+    }
+    // YouTube iframe (slide 6)
+    const tuasIframe = document.getElementById('tuas-yt');
+    if (tuasIframe && e.indexh !== 6) {
+      tuasIframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*'
+      );
+    }
+  });
+
+  /* ══════════════════════════════════════════
+     BeamsBackground — vanilla JS implementation
+     (ported from beams-background.tsx)
+  ══════════════════════════════════════════ */
+  (function initBeams() {
+    const canvas = document.getElementById('beams-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const W = 1696, H = 720;
+    canvas.width  = W;
+    canvas.height = H;
+
+    function createBeam() {
+      const angle = -35 + Math.random() * 10;
+      return {
+        x:          Math.random() * W * 1.5 - W * 0.25,
+        y:          Math.random() * H * 1.5 - H * 0.25,
+        width:      30 + Math.random() * 60,
+        length:     H * 2.5,
+        angle:      angle,
+        speed:      0.6 + Math.random() * 1.2,
+        opacity:    0.12 + Math.random() * 0.16,
+        hue:        340 + Math.random() * 40,
+        pulse:      Math.random() * Math.PI * 2,
+        pulseSpeed: 0.02 + Math.random() * 0.03
+      };
+    }
+
+    let beams = Array.from({ length: 30 }, createBeam);
+    let animId = null;
+
+    function resetBeam(beam, index) {
+      const col     = index % 3;
+      const spacing = W / 3;
+      beam.y       = H + 100;
+      beam.x       = col * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
+      beam.width   = 100 + Math.random() * 100;
+      beam.speed   = 0.5 + Math.random() * 0.4;
+      beam.hue     = 340 + (index * 40) / beams.length;
+      beam.opacity = 0.2 + Math.random() * 0.1;
+    }
+
+    function drawBeam(beam) {
+      ctx.save();
+      ctx.translate(beam.x, beam.y);
+      ctx.rotate(beam.angle * Math.PI / 180);
+      const p = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2);
+      const g = ctx.createLinearGradient(0, 0, 0, beam.length);
+      g.addColorStop(0,   `hsla(${beam.hue},72%,42%,0)`);
+      g.addColorStop(0.1, `hsla(${beam.hue},72%,42%,${p * 0.5})`);
+      g.addColorStop(0.4, `hsla(${beam.hue},72%,42%,${p})`);
+      g.addColorStop(0.6, `hsla(${beam.hue},72%,42%,${p})`);
+      g.addColorStop(0.9, `hsla(${beam.hue},72%,42%,${p * 0.5})`);
+      g.addColorStop(1,   `hsla(${beam.hue},72%,42%,0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.filter = 'blur(35px)';
+      beams.forEach((beam, i) => {
+        beam.y     -= beam.speed;
+        beam.pulse += beam.pulseSpeed;
+        if (beam.y + beam.length < -100) resetBeam(beam, i);
+        drawBeam(beam);
+      });
+      animId = requestAnimationFrame(animate);
+    }
+
+    function start() { if (!animId) animate(); }
+    function stop()  { if (animId) { cancelAnimationFrame(animId); animId = null; } }
+
+    Reveal.on('ready',        e => { if (e.indexh === 0) start(); });
+    Reveal.on('slidechanged', e => { if (e.indexh === 0) start(); else stop(); });
+  })();
+
+  /* ── Custom fragment: highlight rows on slide #/1 ── */
+  Reveal.on('fragmentshown',  e => {
+    e.fragments.forEach(f => {
+      if (f.classList.contains('cmp-row-hl')) f.classList.add('visible');
+    });
+  });
+  Reveal.on('fragmenthidden', e => {
+    e.fragments.forEach(f => {
+      if (f.classList.contains('cmp-row-hl')) f.classList.remove('visible');
+    });
+  });
+</script>
+
+</body>
+</html>
